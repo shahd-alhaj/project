@@ -1,242 +1,41 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة البلاغات والخدمات الإلكترونية - البلدية</title>
-    <!-- الخطوط والأيقونات -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- مكتبة الخرائط Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <!-- مكتبة Excel و PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Lamp Login Form</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- الخلفية الثابتة للبلدية -->
-    <div class="bg-overlay"></div>
-    <div class="bg-image"></div>
-
-    <!-- الشريط العلوي -->
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-city"></i>
-            <span>بلديتي | البوابة الإلكترونية</span>
-        </div>
-        <nav class="navigation">
-            <a href="#home">الرئيسية</a>
-            <a href="#report">تقديم بلاغ</a>
-            <a href="#track">متابعة بلاغ</a>
-            <a href="#adminDashboard">لوحة التحكم (AI)</a>
-        </nav>
-    </header>
-
-    <!-- قسم الترحيب -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>صوتك مسموع.. وخبرك يهمنا</h1>
-            <p>منصة تقديم البلاغات الشاملة لخدمة المواطنين. بدل عناء زيارة البلدية، صور المشكلة وحدد موقعها وسنقوم بمعالجتها حسب الأولوية.</p>
-            <a href="#report" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> تقديم بلاغ الآن</a>
-        </div>
-    </section>
-
-    <!-- نموذج تقديم البلاغ -->
-    <section class="report-section" id="report">
-        <div class="form-card">
-            <div class="form-header">
-                <h2><i class="fa-solid fa-triangle-exclamation"></i> نموذج تقديم بلاغ جديد</h2>
-                <p>يرجى تعبئة كافة البيانات بدقة لضمان سرعة وتقييم البلاغ</p>
-            </div>
-
-            <form id="municipalityForm">
-                <!-- البيانات الشخصية -->
-                <div class="form-group-title"><i class="fa-solid fa-id-card"></i> البيانات الشخصية</div>
-                <div class="form-row">
-                    <div class="input-box">
-                        <label for="fullName">الاسم الرباعي <span class="required">*</span></label>
-                        <input type="text" id="fullName" placeholder="أدخل اسمك الكترونياً" required>
-                    </div>
-                    <div class="input-box">
-                        <label for="phone">رقم الهاتف <span class="required">*</span></label>
-                        <input type="tel" id="phone" placeholder="05XXXXXXXX" required>
-                    </div>
-                </div>
-
-                <!-- تفاصيل المشكلة -->
-                <div class="form-group-title"><i class="fa-solid fa-circle-info"></i> تفاصيل المشكلة</div>
-                <div class="form-row">
-                    <div class="input-box">
-                        <label for="problemType">نوع المشكلة <span class="required">*</span></label>
-                        <select id="problemType" required>
-                            <option value="">-- اختر نوع البلاغ --</option>
-                            <option value="roads">تسريب مياه / حفر شوارع</option>
-                            <option value="waste">تراكم نفايات / نظافة العامة</option>
-                            <option value="lighting">إنارة الطرق والإنارة العامة</option>
-                            <option value="building">مخالفة بناء / تعديات</option>
-                            <option value="other">أخرى</option>
-                        </select>
-                    </div>
-                    <div class="input-box">
-                        <label for="peopleCount">عدد السكان المتأثرين تقريبياً <span class="required">*</span></label>
-                        <input type="number" id="peopleCount" min="1" placeholder="مثال: 50" required>
-                    </div>
-                </div>
-
-                <!-- الموقع والمعالم -->
-                <div class="form-group-title"><i class="fa-solid fa-map-location-dot"></i> موقع ومعالم المنطقة</div>
-                <div class="form-row">
-                    <div class="input-box">
-                        <label for="nearLandmark">هل الموقع بجانب أحدهما؟ <span class="required">*</span></label>
-                        <select id="nearLandmark" required>
-                            <option value="none">لا يوجد معالم رئيسية قريبة</option>
-                            <option value="mosque">بجانب مسجد / جامع</option>
-                            <option value="school">بجانب مدرسة</option>
-                            <option value="both">بجانب مدرسة ومسجد</option>
-                        </select>
-                    </div>
-                    <div class="input-box">
-                        <label for="addressDetails">تفاصيل العنوان</label>
-                        <input type="text" id="addressDetails" placeholder="سيتم تعبئة الموقع تلقائياً من الخريطة...">
-                    </div>
-                </div>
-
-                <!-- الخريطة والـ GPS -->
-                <button type="button" id="locateBtn" class="gps-btn">
-                    <i class="fa-solid fa-location-crosshairs"></i> تحديد موقعي الحالي تلقائياً (GPS)
-                </button>
-                <div id="map"></div>
-                <input type="hidden" id="latitude">
-                <input type="hidden" id="longitude">
-
-                <!-- مرفق الصورة -->
-                <div class="form-group-title margin-top"><i class="fa-solid fa-camera"></i> إرفاق صورة المشكلة</div>
-                <div class="input-box">
-                    <div class="upload-container" id="uploadArea">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <p>اضغط هنا لرفع صورة للمشكلة</p>
-                        <input type="file" id="fileInput" accept="image/*" required hidden>
-                        <div id="previewArea" class="preview-area"></div>
-                    </div>
-                </div>
-
-                <!-- وصف إضافي -->
-                <div class="input-box margin-top">
-                    <label for="description">وصف إضافي للمشكلة</label>
-                    <textarea id="description" rows="3" placeholder="ملاحظات تفصيلية مساعدة..."></textarea>
-                </div>
-
-                <button type="submit" class="submit-btn"><i class="fa-solid fa-paper-plane"></i> إرسال البلاغ فوراً</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- قسم متابعة البلاغ -->
-    <section class="track-section" id="track">
-        <div class="form-card track-card">
-            <h2><i class="fa-solid fa-magnifying-glass"></i> الاستعلام عن حالة بلاغ</h2>
-            <div class="track-box">
-                <input type="text" id="trackCodeInput" placeholder="أدخل رقم البلاغ (مثال: #MUN-1001)">
-                <button id="searchTrackBtn" class="btn-primary">بحث</button>
-            </div>
-            <div id="trackResult" class="track-result"></div>
-        </div>
-    </section>
-
-    <!-- لوحة تحكم الذكاء الاصطناعي للموظفين -->
-    <section class="admin-section" id="adminDashboard">
-        <div class="admin-card">
-            <div class="admin-header">
-                <div>
-                    <h2><i class="fa-solid fa-brain"></i> نظام تحليل وترتيب البلاغات الذكي (AI Dashboard)</h2>
-                    <p>فرز وترتيب البلاغات تلقائياً بناءً على درجة الأولوية والخطورة</p>
-                </div>
-                <div class="admin-actions">
-                    <button id="runAiBtn" class="ai-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> إعادة التحليل</button>
-                    <button id="exportExcelBtn" class="excel-btn"><i class="fa-solid fa-file-excel"></i> Excel</button>
-                    <button id="exportPdfBtn" class="pdf-btn"><i class="fa-solid fa-file-pdf"></i> تقرير PDF</button>
-                </div>
-            </div>
-
-            <div class="table-responsive">
-                <table class="ai-table">
-                    <thead>
-                        <tr>
-                            <th>الأولوية</th>
-                            <th>رقم البلاغ</th>
-                            <th>المواطن</th>
-                            <th>نوع المشكلة</th>
-                            <th>المحيط</th>
-                            <th>المتأثرين</th>
-                            <th>الموقع</th>
-                            <th>الإجراء الموصى به</th>
-                        </tr>
-                    </thead>
-                    <tbody id="aiReportsList"></tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- النافذة المنبثقة للنجاح -->
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <i class="fa-solid fa-circle-check success-icon"></i>
-            <h3>تم تقديم البلاغ بنجاح!</h3>
-            <p>رقم المتابعة الخاص بك هو: <strong id="trackingCode">#MUN-8921</strong></p>
-            <p class="sub-text">تم تحويل البلاغ لنظام التحليل وسيتم معالجته وفق أولوية المنطقة.</p>
-            <button onclick="closeModal()" class="btn-primary">موافق</button>
-        </div>
+  <div class="container" id="container">
+    
+    <div class="lamp-container">
+      <div class="lamp-shade"></div>
+      <div class="lamp-light" id="lampLight"></div>
+      <div class="lamp-stand"></div>
+     
+      <div class="string" id="stringBtn">
+        <div class="handle"></div>
+      </div>
     </div>
 
-    <!-- قالب تقرير الـ PDF الرسمية المخفي -->
-    <div id="pdfTemplate" class="pdf-template">
-        <div class="pdf-header">
-            <div class="header-right">
-                <h3>دولة فلسطين</h3>
-                <h4>بلدية المدينة - قسم المتابعة والصيانة</h4>
-                <p>وحدة التقييم والتحليل الذكي</p>
-            </div>
-            <div class="header-center">
-                <i class="fa-solid fa-city pdf-logo-icon"></i>
-            </div>
-            <div class="header-left">
-                <p><strong>التاريخ:</strong> <span id="pdfDate"></span></p>
-                <p><strong>الرقم المرجعي:</strong> <span id="pdfReportId"></span></p>
-            </div>
+    
+    <div class="login-form" id="loginForm">
+      <h2>Welcome</h2>
+      <form onsubmit="return false;">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" placeholder="Enter name">
         </div>
-        <hr class="pdf-divider">
-        <h2 class="pdf-title">تقرير أولويات البلاغات المرفوعة للبلدية</h2>
-        <table class="pdf-table">
-            <thead>
-                <tr>
-                    <th>الدرجة</th>
-                    <th>رقم البلاغ</th>
-                    <th>المواطن</th>
-                    <th>المشكلة</th>
-                    <th>المعالم</th>
-                    <th>المتأثرين</th>
-                    <th>الإجراء الموصى به</th>
-                </tr>
-            </thead>
-            <tbody id="pdfTableBody"></tbody>
-        </table>
-        <div class="pdf-footer">
-            <div class="signature-box"><p>مسؤول قسم الصيانة</p><p>...................</p></div>
-            <div class="signature-box"><p>اعتماد رئيس البلدية</p><p>...................</p></div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" placeholder="Enter Password">
         </div>
+        <button class="login-btn">Sign In</button>
+      </form>
     </div>
+  </div>
 
-    <footer>
-        <p>© 2026 جميع الحقوق محفوظة - منصة البلاغات والخدمات الإلكترونية للبلدية</p>
-    </footer>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
