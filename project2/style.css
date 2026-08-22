@@ -1,0 +1,616 @@
+/* ============================================================
+   DESIGN TOKENS
+   لوحة داكنة "فولاذ وذهب" — بطاقة معدنية مطفوة على خلفية غرافيت،
+   بلا تدرجات نيون مبتذلة، مع نبرة بصرية هادئة وفاخرة.
+   ============================================================ */
+:root {
+  /* الألوان */
+  --bg-base: #0a0c10;
+  --bg-vignette: #12141a;
+  --panel-bg: rgba(255, 255, 255, 0.035);
+  --panel-border: rgba(255, 255, 255, 0.09);
+  --panel-border-focus: rgba(203, 163, 92, 0.55);
+
+  --text-primary: #eef0f4;
+  --text-secondary: #8d93a3;
+  --text-muted: #5b6072;
+
+  --gold: #cba35c;
+  --gold-soft: #e2c789;
+  --error: #e5697a;
+  --success: #6fcf97;
+
+  /* البطاقة */
+  --card-navy-1: #171c2b;
+  --card-navy-2: #212a45;
+  --card-navy-3: #0c0f18;
+  --card-line: rgba(255, 255, 255, 0.14);
+
+  /* الطباعة */
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+
+  /* الأبعاد */
+  --card-w: 400px;
+  --card-h: 250px;
+  --radius-card: 20px;
+  --radius-panel: 22px;
+  --radius-field: 12px;
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% -10%, rgba(203, 163, 92, 0.08), transparent 60%),
+    radial-gradient(ellipse 80% 60% at 90% 100%, rgba(33, 42, 69, 0.35), transparent 60%),
+    var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 56px 24px 80px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.page-eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(203, 163, 92, 0.35);
+  border-radius: 999px;
+  padding: 5px 14px;
+  margin-bottom: 18px;
+}
+
+.page-title {
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 600;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin: 0;
+}
+
+.paywall {
+  display: grid;
+  grid-template-columns: minmax(280px, 440px) minmax(320px, 440px);
+  gap: 48px;
+  align-items: start;
+  justify-content: center;
+}
+
+@media (max-width: 860px) {
+  .paywall {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 36px;
+  }
+}
+
+/* ============================================================
+   CARD STAGE — منظور ثلاثي الأبعاد
+   ============================================================ */
+.card-stage {
+  position: sticky;
+  top: 48px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 860px) {
+  .card-stage {
+    position: static;
+  }
+}
+
+.card-scene {
+  width: var(--card-w);
+  max-width: 100%;
+  aspect-ratio: 400 / 250;
+  perspective: 1400px;
+}
+
+.card-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+}
+
+.card-3d.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* عند حركة الفأرة نُضيف tilt عبر متغيرات CSS مُحدَّثة من JS */
+.card-scene:hover .card-3d:not(.is-flipped) {
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+}
+
+.card-scene:hover .card-3d.is-flipped {
+  transform: rotateY(calc(180deg + var(--tilt-y, 0deg))) rotateX(var(--tilt-x, 0deg));
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-card);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.65),
+    0 10px 25px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: #eef0f4;
+}
+
+/* الوجه الأمامي */
+.card-front {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 40%),
+    linear-gradient(155deg, var(--card-navy-2) 0%, var(--card-navy-1) 45%, var(--card-navy-3) 100%);
+  padding: 26px 26px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-sheen {
+  position: absolute;
+  inset: -40% -20%;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.09) 45%,
+    rgba(255, 255, 255, 0.02) 55%,
+    transparent 70%
+  );
+  transform: translateX(var(--sheen-x, -30%));
+  transition: transform 0.4s ease;
+  pointer-events: none;
+}
+
+.card-face-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.card-chip {
+  width: 46px;
+  height: 34px;
+  border-radius: 7px;
+  background: linear-gradient(155deg, #e7cf9c, var(--gold) 55%, #a9803f);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 6px 5px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.chip-line {
+  height: 1px;
+  background: rgba(90, 64, 20, 0.55);
+  width: 100%;
+}
+
+.card-contactless {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.75);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transform: rotate(90deg);
+  margin-top: 4px;
+}
+
+.card-number {
+  font-family: var(--font-mono);
+  font-size: clamp(19px, 5vw, 23px);
+  letter-spacing: 0.04em;
+  display: flex;
+  gap: 14px;
+  color: #f4f1ea;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 4px 6px;
+  margin: 0 -6px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.digit-group {
+  min-width: 2.1ch;
+}
+
+.card-face-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-holder-block,
+.card-expiry-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 8px;
+  padding: 4px 6px;
+  margin: 0 -6px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  min-width: 0;
+}
+
+.card-holder-block {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.card-label {
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(238, 240, 244, 0.5);
+}
+
+.card-value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#cardHolderDisplay {
+  display: block;
+  max-width: 100%;
+}
+
+.card-brand {
+  flex-shrink: 0;
+}
+
+.visa-logo {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #ffffff, #c7cbd6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* هالة تظهر عند تركيز حقل مطابق على العنصر المقابل بالبطاقة */
+.highlighted {
+  background: rgba(203, 163, 92, 0.14) !important;
+  box-shadow: 0 0 0 1px rgba(203, 163, 92, 0.4) !important;
+}
+
+/* الوجه الخلفي */
+.card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(155deg, var(--card-navy-2) 0%, var(--card-navy-1) 50%, var(--card-navy-3) 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.magnetic-stripe {
+  margin-top: 22px;
+  height: 42px;
+  width: 100%;
+  background: repeating-linear-gradient(180deg, #0c0c0e 0px, #16171b 2px, #0c0c0e 4px);
+}
+
+.card-back-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 24px 0;
+}
+
+.signature-strip {
+  flex: 1;
+  height: 36px;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.85),
+      rgba(255, 255, 255, 0.85) 2px,
+      transparent 2px,
+      transparent 5px
+    ),
+    #ece7dc;
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  justify-content: flex-end;
+}
+
+.signature-note {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: #6b6555;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.cvv-box {
+  flex-shrink: 0;
+  background: #f4f1ea;
+  border-radius: 5px;
+  padding: 7px 12px;
+  min-width: 54px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.cvv-value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  color: #23262e;
+  font-style: italic;
+}
+
+.card-back-footer {
+  padding: 14px 24px 18px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.visa-logo-back {
+  font-size: 18px;
+  opacity: 0.85;
+}
+
+/* ظل ديناميكي أسفل البطاقة يتفاعل مع الإمالة */
+.card-scene {
+  position: relative;
+}
+.card-scene::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -18px;
+  height: 30px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55), transparent 72%);
+  filter: blur(4px);
+  transform: translateX(calc(var(--tilt-y, 0deg) * -1.2px));
+  transition: transform 0.4s ease;
+  z-index: -1;
+}
+
+/* ============================================================
+   FORM PANEL
+   ============================================================ */
+.form-panel {
+  width: 100%;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-panel);
+  padding: 32px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 50px -25px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 480px) {
+  .form-panel {
+    padding: 24px 18px;
+  }
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+label {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-field);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  padding: 13px 44px 13px 14px;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+[dir="rtl"] input {
+  padding: 13px 44px 13px 14px;
+}
+
+input::placeholder {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
+}
+
+input:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+input:focus {
+  border-color: var(--panel-border-focus);
+  background: rgba(203, 163, 92, 0.05);
+  box-shadow: 0 0 0 3px rgba(203, 163, 92, 0.14);
+}
+
+input.invalid {
+  border-color: var(--error);
+}
+
+input.invalid:focus {
+  box-shadow: 0 0 0 3px rgba(229, 105, 122, 0.16);
+}
+
+.input-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  transition: stroke 0.25s ease;
+}
+
+.input-wrap:focus-within .input-icon {
+  stroke: var(--gold);
+}
+
+.field-error {
+  display: block;
+  min-height: 16px;
+  font-size: 12px;
+  color: var(--error);
+  margin-top: 6px;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 15px 20px;
+  border: none;
+  border-radius: var(--radius-field);
+  background: linear-gradient(135deg, var(--gold-soft), var(--gold) 70%);
+  color: #1a1508;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 12px 30px -12px rgba(203, 163, 92, 0.55);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn:focus-visible {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 3px;
+}
+
+.form-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 16px 0 0;
+  line-height: 1.5;
+}
+
+.form-note svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+/* focus-visible عام لإمكانية الوصول بلوحة المفاتيح */
+input:focus-visible {
+  outline: none;
+}
+
+/* ============================================================
+   MOBILE — تصغير البطاقة تلقائيًا، بلا Overflow أفقي
+   ============================================================ */
+@media (max-width: 480px) {
+  :root {
+    --card-w: 320px;
+  }
+  .page {
+    padding: 36px 16px 60px;
+  }
+  .card-number {
+    font-size: 17px;
+    gap: 9px;
+  }
+}
