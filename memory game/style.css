@@ -1,0 +1,506 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(circle at top left, #ffe1ed, transparent 35%),
+        radial-gradient(circle at bottom right, #e8c5e8, transparent 35%),
+        #f8dce8;
+
+    color: #4b2545;
+}
+
+
+/* =========================
+   START SCREEN
+========================= */
+
+.control-buttons {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(117, 42, 91, 0.45);
+    backdrop-filter: blur(8px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 100;
+}
+
+.start-box {
+    width: min(90%, 500px);
+
+    padding: 50px 35px;
+
+    text-align: center;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 25px 60px rgba(91, 35, 76, 0.25);
+
+    animation: popUp 0.5s ease;
+}
+
+.game-icon {
+    font-size: 70px;
+    margin-bottom: 15px;
+}
+
+.start-box h1 {
+    font-size: 42px;
+    color: #8d2662;
+    margin-bottom: 12px;
+}
+
+.start-box p {
+    color: #76536d;
+    font-size: 17px;
+    margin-bottom: 30px;
+}
+
+.control-button,
+#playAgain {
+    border: none;
+
+    padding: 15px 35px;
+
+    border-radius: 50px;
+
+    background: linear-gradient(
+        135deg,
+        #b83280,
+        #8d2662
+    );
+
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 20px rgba(141, 38, 98, 0.25);
+
+    transition: 0.3s;
+}
+
+.control-button:hover,
+#playAgain:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 15px 25px rgba(141, 38, 98, 0.35);
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.game-header {
+    width: min(1100px, 94%);
+
+    margin: 25px auto 15px;
+
+    padding: 20px 25px;
+
+    background: rgba(255, 255, 255, 0.8);
+
+    border: 2px solid rgba(255, 255, 255, 0.7);
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 10px 30px rgba(91, 35, 76, 0.12);
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.game-header > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #98728e;
+}
+
+.name,
+.tries,
+#matchedPairs {
+    font-size: 21px;
+    font-weight: bold;
+    color: #8d2662;
+}
+
+
+/* =========================
+   GAME
+========================= */
+
+.memory-game-blocks {
+    width: min(1100px, 94%);
+
+    margin: 0 auto 30px;
+
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 12px;
+
+    perspective: 1000px;
+}
+
+.game-block {
+    height: 180px;
+
+    position: relative;
+
+    cursor: pointer;
+
+    transform-style: preserve-3d;
+
+    transition:
+        transform 0.5s ease,
+        scale 0.2s ease;
+}
+
+.game-block:hover {
+    scale: 1.03;
+}
+
+.game-block .face {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 18px;
+
+    backface-visibility: hidden;
+
+    -webkit-backface-visibility: hidden;
+
+    box-shadow:
+        0 8px 18px rgba(91, 35, 76, 0.15);
+
+    overflow: hidden;
+}
+
+
+/* Front */
+
+.game-block .front {
+    background:
+        linear-gradient(
+            135deg,
+            #c94c91,
+            #8d2662
+        );
+
+    border: 4px solid #fff;
+
+    font-size: 75px;
+
+    font-weight: bold;
+
+    color: rgba(255, 255, 255, 0.9);
+
+    text-shadow:
+        0 3px 5px rgba(0, 0, 0, 0.15);
+}
+
+.game-block .front::before {
+    content: "";
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+
+/* Back */
+
+.game-block .back {
+    background: #fff7fb;
+
+    border: 4px solid #d98bb5;
+
+    transform: rotateY(180deg);
+}
+
+.game-block .back img {
+    width: 78%;
+    height: 78%;
+
+    object-fit: contain;
+
+    border-radius: 12px;
+}
+
+
+/* Flipped */
+
+.game-block.is-flipped {
+    transform: rotateY(180deg);
+}
+
+
+/* Matched */
+
+.game-block.is-matched {
+    transform: rotateY(180deg);
+
+    cursor: default;
+
+    animation: matched 0.5s ease;
+}
+
+.game-block.is-matched .back {
+    border-color: #65b891;
+    background: #f0fff8;
+}
+
+
+/* Wrong */
+
+.game-block.is-wrong {
+    animation: shake 0.4s ease;
+}
+
+
+/* =========================
+   WIN SCREEN
+========================= */
+
+.win-screen {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(91, 35, 76, 0.5);
+
+    backdrop-filter: blur(8px);
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 200;
+}
+
+.win-screen.show {
+    display: flex;
+}
+
+.win-box {
+    width: min(90%, 500px);
+
+    padding: 45px 30px;
+
+    text-align: center;
+
+    background: white;
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 30px 70px rgba(0, 0, 0, 0.25);
+
+    animation: popUp 0.5s ease;
+}
+
+.trophy {
+    font-size: 75px;
+
+    animation: bounce 1s infinite;
+}
+
+.win-box h2 {
+    font-size: 38px;
+
+    color: #8d2662;
+
+    margin: 15px 0;
+}
+
+.win-box p {
+    color: #76536d;
+
+    font-size: 18px;
+
+    margin-bottom: 12px;
+}
+
+#finalTries {
+    color: #b83280;
+}
+
+.final-score {
+    margin-bottom: 25px !important;
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes popUp {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes matched {
+    0% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1.08;
+    }
+
+    100% {
+        scale: 1;
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-8px);
+    }
+
+    50% {
+        transform: translateX(8px);
+    }
+
+    75% {
+        transform: translateX(-5px);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .memory-game-blocks {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .game-block {
+        height: 170px;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .game-header {
+        padding: 15px;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        text-align: center;
+    }
+
+    .game-header > div {
+        width: 30%;
+        align-items: center;
+    }
+
+    .name,
+    .tries,
+    #matchedPairs {
+        font-size: 16px;
+    }
+
+    .memory-game-blocks {
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 8px;
+    }
+
+    .game-block {
+        height: 130px;
+    }
+
+    .game-block .front {
+        font-size: 50px;
+    }
+
+    .start-box h1 {
+        font-size: 34px;
+    }
+}
+
+
+@media (max-width: 400px) {
+
+    .memory-game-blocks {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .game-block {
+        height: 150px;
+    }
+}
+
+
+
+

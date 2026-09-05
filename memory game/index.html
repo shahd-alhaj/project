@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Memory Game</title>
+</head>
+
+<body>
+
+    <!-- Start Screen -->
+    <div class="control-buttons" id="startScreen">
+        <div class="start-box">
+            <div class="game-icon">🧠</div>
+
+            <h1>Memory Game</h1>
+            <p>Test your memory and find all matching pairs!</p>
+
+            <button class="control-button" id="startButton">
+                Start Game
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Game Header -->
+    <header class="game-header">
+
+        <div class="player-info">
+            <span class="label">Player</span>
+            <span class="name">
+                <span id="playerName">Unknown</span>
+            </span>
+        </div>
+
+        <div class="score-info">
+            <span class="label">Wrong Tries</span>
+            <span class="tries" id="wrongTries">0</span>
+        </div>
+
+        <div class="pairs-info">
+            <span class="label">Pairs</span>
+            <span id="matchedPairs">0 / 10</span>
+        </div>
+
+    </header>
+
+
+    <!-- Game -->
+    <main class="memory-game-blocks">
+
+        <!-- 1 -->
+        <div class="game-block" data-tech="angular">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 163234.png" alt="Angular">
+            </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="game-block" data-tech="angular">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 163234.png" alt="Angular">
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="game-block" data-tech="secend">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 164517.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="game-block" data-tech="secend">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 164517.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="game-block" data-tech="third">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 164216.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="game-block" data-tech="third">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 164216.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="game-block" data-tech="four">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 164523.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="game-block" data-tech="four">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 164523.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="game-block" data-tech="five">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 145534.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="game-block" data-tech="five">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 145534.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="game-block" data-tech="six">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 145546.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="game-block" data-tech="six">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 145546.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="game-block" data-tech="seven">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 145554.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="game-block" data-tech="seven">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 145554.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="game-block" data-tech="eight">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 165520.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 16 -->
+        <div class="game-block" data-tech="eight">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 165520.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 17 -->
+        <div class="game-block" data-tech="nine">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 163853.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 18 -->
+        <div class="game-block" data-tech="nine">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 163853.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 19 -->
+        <div class="game-block" data-tech="ten">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 144957.png" alt="Technology">
+            </div>
+        </div>
+
+        <!-- 20 -->
+        <div class="game-block" data-tech="ten">
+            <div class="face front">?</div>
+            <div class="face back">
+                <img src="image/لقطة شاشة 2026-09-05 144957.png" alt="Technology">
+            </div>
+        </div>
+
+    </main>
+
+
+    <!-- Win Screen -->
+    <div class="win-screen" id="winScreen">
+
+        <div class="win-box">
+
+            <div class="trophy">🏆</div>
+
+            <h2>Congratulations!</h2>
+
+            <p>
+                Great job,
+                <span id="winnerName">Player</span>!
+            </p>
+
+            <p class="final-score">
+                Wrong tries:
+                <strong id="finalTries">0</strong>
+            </p>
+
+            <button id="playAgain">
+                Play Again
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
